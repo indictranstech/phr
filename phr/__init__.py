@@ -662,9 +662,11 @@ def updatePassword(data):
 def shareDM(data):
 	share_info=json.loads(data)
 	share_data=build_dm_share_data(share_info)
-	from templates.pages.disease_monitoring import share_dm
-	return share_dm(json.dumps(share_data["data_row"]), share_data["header"], json.dumps(share_info), \
+	from templates.pages.disease_monitoring import share_dm,notify_provider_of_sharing
+	response =  share_dm(json.dumps(share_data["data_row"]), share_data["header"], json.dumps(share_info), \
 		share_info["profile_id"], share_info["event_title"])
+	notify_provider_of_sharing(data,share_info["profile_id"])
+	return response
 
 def build_dm_share_data(share_info):
 	header_row = ["<th></th>"]

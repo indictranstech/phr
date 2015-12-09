@@ -187,7 +187,8 @@ def share_dm(data, header, share_info, profile_id, disease):
 def notify_provider_of_sharing(data,profile_id):
 	share_info = json.loads(data)
 	if share_info.get('share_via') == 'Provider Account':
-		args = {"dr":share_info.get('doctor_name')}
+		patient_name = frappe.db.get_value("User", {"profile_id":share_info.get('profile_id')}, 'concat(first_name, " ", last_name)')
+		args = {"dr":share_info.get('doctor_name'),"patient":patient_name,"duration":share_info.get("sharing_duration")}
 		email_msg = "Patient has shared DM with You. \n\n Thank you. \n\n Team HealthSnapp."
 		from phr.templates.pages.event import notify_provider
 		notify_provider(share_info.get('doctor_id'),profile_id,"DM Share",args,email_msg)
